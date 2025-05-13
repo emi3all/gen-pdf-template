@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+      /* Regular 400 */
+      @font-face {
+        font-family: "saraban-psk";
+        src: url("./fonts/sarabunPSK/THSarabun.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap; /* avoids FOIT */
+      }
+
+      /* Bold 700 */
+      @font-face {
+        font-family: "saraban-psk";
+        src: url("./fonts/sarabunPSK/THSarabun-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      /* Italic 400 */
+      @font-face {
+        font-family: "saraban-psk";
+        src: url("./fonts/sarabunPSK/THSarabun-Italic.ttf") format("truetype");
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+      }
+
+      body {
+        margin: 0;
+        font-size: 10pt;
+        line-height: 23pt;
+        font-family: "saraban-psk";
+        font-weight: 300;
+      }
+      .sheet-outer {
+        margin: 0;
+      }
+      .sheet {
+        margin: 0;
+        overflow: hidden;
+        position: relative;
+        box-sizing: border-box;
+        page-break-after: always;
+      }
+
+      .sheet-outer.A4 .sheet {
+        width: 210mm;
+        height: 296mm;
+      }
+      .sheet.padding-5mm {
+        padding: 5mm 10mm;
+      }
+
+      @media screen {
+        body {
+          background: #e0e0e0;
+        }
+
+        .sheet {
+          background: white;
+          box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+          margin: 5mm auto;
+        }
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      @media print {
+        .sheet-outer.A4,
+        .sheet-outer.A5.landscape {
+          width: 210mm;
+        }
+      }
+
+      .field-value {
+        display: inline-block;
+        border-bottom: 1.5px dotted #000000;
+        /* padding-left: 10px; */
+        text-align: left;
+        text-indent: 5px;
+        line-height: 12pt;
+      }
+      .picture-box {
+        width: 80px;
+        height: 100px;
+        border: 1px solid #000;
+        margin-left: 10px;
+      }
+      .text-center {
+        text-align: center !important;
+      }
+      .text-left {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="sheet-outer A4">
+      <section class="sheet padding-5mm">
+        <h3 style="text-align: center">ประวัติ นักเรียน / นักศึกษา ภาคพิเศษ</h3>
+        <table>
+          <tr>
+            <td>
+              <div class="line">
+                ปีการศึกษา
+                <span class="field-value" style="width: 50px;">{{lookup (lookup educationalRecord 0) "year"}}</span>
+                ระดับ
+                <span class="field-value" style="width: 70px">{{lookup (lookup educationalRecord 0) "level"}}</span>
+                แผนก
+                <span class="field-value" style="width: 115px">{{lookup (lookup educationalRecord 0) "department"}}</span>
+                อ.ที่ปรึกษา
+                <span class="field-value" style="width: 180px">{{lookup (lookup educationalRecord 0) "teacher"}}</span>
+              </div>
+            </td>
+            <td rowspan="3">
+              <div class="picture-box">
+                <img src="img/file.jpg" alt="">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="line">
+                ปีการศึกษา
+                <span class="field-value" style="width: 50px;">{{lookup (lookup educationalRecord 1) "year"}}</span>
+                ระดับ
+                <span class="field-value" style="width: 70px">{{lookup (lookup educationalRecord 1) "level"}}</span>
+                แผนก
+                <span class="field-value" style="width: 115px">{{lookup (lookup educationalRecord 1) "department"}}</span>
+                อ.ที่ปรึกษา
+                <span class="field-value" style="width: 180px">{{lookup (lookup educationalRecord 1) "teacher"}}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="line">
+                ปีการศึกษา
+                <span class="field-value" style="width: 50px;">{{lookup (lookup educationalRecord 2) "year"}}</span>
+                ระดับ
+                <span class="field-value" style="width: 70px">{{lookup (lookup educationalRecord 2) "level"}}</span>
+                แผนก
+                <span class="field-value" style="width: 115px">{{lookup (lookup educationalRecord 2) "department"}}</span>
+                อ.ที่ปรึกษา
+                <span class="field-value" style="width: 180px">{{lookup (lookup educationalRecord 2) "teacher"}}</span>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="line">
+          ชื่อ-สกุล 
+          {{#if (eq student.prefix "นาย")}}นาย{{else}}<del>นาย</del>{{/if}} / 
+          {{#if (eq student.prefix "นางสาว")}}นางสาว{{else}}<del>นางสาว</del>{{/if}} / 
+          {{#if (eq student.prefix "นาง")}}นาง{{else}}<del>นาง</del>{{/if}}
+          <span class="field-value" style="width: 200px">{{student.fullname}}</span>
+          ชื่อเล่น
+          <span class="field-value" style="width: 100px">{{student.nickname}}</span>
+          ศาสนา
+          <span class="field-value" style="width: 170px">{{student.religion}}</span>
+        </div>
+        <div class="line">
+          ที่อยู่ปัจจุบันชื่อหมู่บ้าน/คอนโด/อาคาร
+          <span class="field-value" style="width: 510px">{{student.address}}</span>
+        </div>
+        <div class="line">
+          ชั้นที่พัก / ห้องที่พัก
+          <span class="field-value" style="width: 125px">{{student.numberOfRoom}}</span>
+          บ้านเลขที่
+          <span class="field-value" style="width: 125px">{{student.numberOfHouse}}</span>
+          หมู่
+          <span class="field-value" style="width: 125px">{{student.group}}</span>
+          ซอย
+          <span class="field-value" style="width: 123px">{{student.alley}}</span>
+        </div>
+        <div class="line">
+          ถนน
+          <span class="field-value" style="width: 185px">{{student.road}}</span>
+          แขวง/ตำบล
+          <span class="field-value" style="width: 185px">{{student.subdistrict}}</span>
+          เขต/อำเภอ
+          <span class="field-value" style="width: 180px">{{student.district}}</span>
+        </div>
+        <div class="line">
+          จังหวัด
+          <span class="field-value" style="width: 185px">{{student.province}}</span>
+          รหัสไปรษณีย์
+          <span class="field-value" style="width: 180px">{{student.postalCode}}</span>
+          โทรศัพท์
+          <span class="field-value" style="width: 180px">{{student.tel}}</span>
+        </div>
+
+        <div class="line">
+          ชื่อ-สกุลบิดา
+          <span class="field-value" style="width: 270px">{{student.father.fullname}}</span>
+          อาชีพ
+          <span class="field-value" style="width: 145px">{{student.father.occupation}}</span>
+          โทรศัพท์
+          <span class="field-value" style="width: 140px">{{student.father.tel}}</span>
+        </div>
+
+        <div class="line">
+          ชื่อ-สกุลมารดา
+          <span class="field-value" style="width: 259px">{{ student.mother.prefix }} {{student.mother.fullname}}</span>
+          อาชีพ
+          <span class="field-value" style="width: 145px">{{ student.mother.occupation}}</span>
+          โทรศัพท์
+          <span class="field-value" style="width: 140px">{{student.mother.tel}}</span>
+        </div>
+
+        <div class="line">
+          นักเรียนมีพี่น้องรวมทั้งหมดจำนวน
+          <span class="field-value text-center" style="width: 65px">{{student.parent.numberOfSiblings}}</span> คน
+          เป็นชาย
+          <span class="field-value text-center" style="width: 64px">{{student.parent.beBoys}}</span> คน
+          เป็นหญิง
+          <span class="field-value text-center" style="width: 64px">{{student.parent.beGirls}}</span> คน
+          นักเรียนเป็นบุตรคนที่
+          <span class="field-value text-center" style="width: 64px">{{student.parent.numberOfStudentsParent}}</span>
+        </div>
+        <div class="line">
+          ปัจจุบันนักเรียน นักศึกษาอาศัยอยู่กับ (ไม่ใช่พ่อ-แม่) ชื่อ-สกุล
+          <span class="field-value" style="width: 391px">{{student.parent.fullname}}</span>
+        </div>
+
+        <div class="line">
+          เกี่ยวข้องเป็น
+          <span class="field-value" style="width: 180px">{{student.parent.relevance}}</span>
+          โทรศัพท์
+          <span class="field-value" style="width: 182px">{{student.parent.tel}}</span>
+          ID Line
+          <span class="field-value" style="width: 180px">{{student.parent.lineId}}</span>
+        </div>
+
+        <div class="line">
+          <span style="margin-right: 20px">ปัจจุบัน บิดา-มารดา</span>
+          (
+          <span
+            style="display: inline-block; width: 6pt; margin-right: 1pt"
+          >
+            {{#if (eq student.parent.status "อยู่ด้วยกัน")}}✓{{/if}}
+          </span>
+          )
+          <span style="margin-right: 47px">อยู่ด้วยกัน</span>
+          (
+          <span
+            style="display: inline-block; width: 5pt; margin-right: 1pt"
+          >
+            {{#if (eq student.parent.status "แยกกันอยู่")}}✓{{/if}}
+          </span>
+          )
+          <span style="margin-right: 57px;">แยกกันอยู่</span>
+          (
+          <span
+            style="display: inline-block; width: 5pt; margin-right: 1pt"
+          >
+            {{#if (eq student.parent.status "หย่าร้างกัน")}}✓{{/if}}
+          </span>
+          )
+          <span style="margin-right: 20px">หย่าร้างกัน</span>
+        </div>
+
+        <div class="line">
+          <span style="margin-left: 130px"></span>
+          (
+          <span
+            style="display: inline-block; width: 6pt; margin-right: 1pt"
+          >
+            {{#if (eq student.parent.status "บิดาถึงแก่กรรม")}}✓{{/if}}
+          </span>
+          )
+          <span style="margin-right: 20px">บิดาถึงแก่กรรม</span>
+          (
+          <span
+            style="display: inline-block; width: 5pt; margin-right: 1pt"
+          >
+            {{#if (eq student.parent.status "มารดาถึงแก่กรรม")}}✓{{/if}}
+          </span>
+          )
+          <span style="margin-right: 20px">มารดาถึงแก่กรรม</span>
+          (
+          <span
+            style="display: inline-block; width: 5pt; margin-right: 1pt"
+          >
+          {{#if (eq student.parent.status "อื่นๆ")}}✓{{/if}}
+          </span>
+          ) อื่นๆ
+          <span class="field-value" style="width: 173px">{{student.parent.other}}</span>
+        </div>
+        
+        <div
+          class="line"
+          style="border-bottom: 1.5px solid #000000; margin: 10px 0px"
+        ></div>
+
+        <table>
+          <tr>
+            <td>
+              <div class="line">
+                ผู้ปกครองปัจจุบัน ชื่อ-สกุล
+                <span class="field-value" style="width: 280px">{{ currentParent.fullname}}</span>
+                อาชีพ
+                <span class="field-value" style="width: 150px">{{ currentParent.job }}</span>
+              </div>
+            </td>
+            <td rowspan="3">
+              <div class="picture-box"></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="line">
+                เกี่ยวข้องกับ นักเรียน นักศึกษาเป็น
+                <span class="field-value" style="width: 427px">{{ currentParent.relevance }}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="line">
+                ที่อยู่ปัจจุบันชื่อหมู่บ้าน/คอนโด/อาคาร
+                <span class="field-value" style="width: 405px">{{currentParent.address}}</span>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="line">
+          ชั้นที่พัก / ห้องที่พัก
+          <span class="field-value" style="width: 125px">{{currentParent.numberOfRoom}}</span>
+          บ้านเลขที่
+          <span class="field-value" style="width: 125px">{{currentParent.numberOfHouse}}</span>
+          หมู่
+          <span class="field-value" style="width: 125px">{{currentParent.group}}</span>
+          ซอย
+          <span class="field-value" style="width: 128px">{{currentParent.alley}}</span>
+        </div>
+
+        <div class="line">
+          ถนน
+          <span class="field-value" style="width: 185px">{{currentParent.road}}</span>
+          แขวง/ตำบล
+          <span class="field-value" style="width: 185px">{{currentParent.subdistrict}}</span>
+          เขต/อำเภอ
+          <span class="field-value" style="width: 183px">{{currentParent.district}}</span>
+        </div>
+
+        <div class="line">
+          จังหวัด
+          <span class="field-value" style="width: 180px">{{currentParent.province}}</span>
+          รหัสไปรษณีย์
+          <span class="field-value" style="width: 180px">{{currentParent.postalCode}}</span>
+          โทรศัพท์
+          <span class="field-value" style="width: 183px">{{currentParent.tel}}</span>
+        </div>
+
+        <div class="line">
+          สถานที่ทำงานของนักเรียน นักศึกษา
+          <span class="field-value" style="width: 522px">{{job.addressName}}</span>
+        </div>
+
+        <div class="line">
+          เลขที่
+          <span class="field-value" style="width: 150px">{{job.numberOfHouse}}</span>
+          หมู่
+          <span class="field-value" style="width: 150px">{{job.group}}</span>
+          ซอย
+          <span class="field-value" style="width: 150px">{{job.alley}}</span>
+          ถนน
+          <span class="field-value" style="width: 150px">{{job.road}}</span>
+        </div>
+
+        <div class="line">
+          แขวง/ตำบล
+          <span class="field-value" style="width: 174px">{{job.subdistrict}}</span>
+          เขต/อำเภอ
+          <span class="field-value" style="width: 185px">{{job.subdistrict}}</span>
+          จังหวัด
+          <span class="field-value" style="width: 183px">{{job.province}}</span>
+        </div>
+
+        <div class="line">
+          รหัสไปรษณีย์
+          <span class="field-value" style="width: 175px">{{job.postalCode}}</span>
+          โทรศัพท์
+          <span class="field-value" style="width: 178px">{{job.tel1}}</span>
+          โทรศัพท์
+          <span class="field-value" style="width: 178px">{{job.tel2}}</span>
+        </div>
+
+        <div class="line">
+          โรงเรียนเดิมที่ นักเรียน นักศึกษาจบการศึกษา
+          <span class="field-value" style="width: 470px">{{oldSchool.oldSchoolName}}</span>
+        </div>
+
+        <div class="line">
+          เพื่อนสนิทในวิทยาลัยอาชีวศึกษาเทคนิคบริหารธุรกิจกรุงเทพ ชื่อ-สกุล
+          <span class="field-value" style="width: 350px">{{oldSchool.friendName}}</span>
+        </div>
+
+        <div class="line">
+          ประวัติสุขภาพ (ถ้ามีโรคประจำตัวต้องระบุให้ชัดเจน )
+        </div>
+
+        <div class="line">
+          (
+          <span
+            style="display: inline-block; width: 12pt; margin-right: pt"
+          >
+          {{#if (eq student.disease "")}}✓{{/if}}
+          </span>
+          ) ไม่มี
+        </div>
+        <div class="line">
+          (
+          <span
+            style="display: inline-block; width: 12pt; margin-right: pt"
+          >
+          {{#if (noteq student.disease "")}}✓{{/if}}
+          </span>
+          ) มี ระบุโรค / อาการ
+          <span class="field-value" style="width: 580px">{{student.disease}}</span>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
