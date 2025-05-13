@@ -1,5 +1,21 @@
 node_modules
-input
-output
-img/currentparent
-img/student
+
+# Ignore everything inside input/
+input/**
+output/**
+img/currentparent/**
+img/student/**
+
+
+# But allow the folder itself
+!input/
+!output/
+!img/currentparent/
+!img/student/
+
+# Allow the placeholder file so folder is committed
+!input/.gitkeep
+!output/.gitkeep
+!img/currentparent/.gitkeep
+!img/student/.gitkeep
+
