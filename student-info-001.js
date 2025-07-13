@@ -6,8 +6,6 @@ const csv = require("csv-parser");
 
 let results = [];
 
-
-
 fs.createReadStream("./input/data.csv")
   .pipe(
     csv({
@@ -126,53 +124,55 @@ fs.createReadStream("./input/data.csv")
       };
     });
 
-    // console.log(JSON.stringify(newResults));
+    // console.log(JSON.stringify(newResults[0]));
 
     // console.log("All images downloaded", newResults);
 
 
     newResults.forEach((item, index) => {
       (async () => {
-        if (item.student.image && item.student.image !== "") {
-          try {
-            item.student.imgBase64 = fs.readFileSync(`img/student/${item.student.image.split("id=")[1]}.jpg`).toString('base64');
-          } catch (error) {
-            console.log('\x1b[33m%s\x1b[0m', "Error reading student image file:", item.student.image)
+        setTimeout(async () => {
+          if (item.student.image && item.student.image !== "") {
+            try {
+              item.student.imgBase64 = fs.readFileSync(`img/student/${item.student.image.split("id=")[1]}.jpg`).toString('base64');
+            } catch (error) {
+              console.log('\x1b[33m%s\x1b[0m', "Error reading student image file:", item.student.image)
+            }
           }
-        }
-   
-        if (item.currentParent.image && item.currentParent.image !== "") {
-          try {
-            item.currentParent.imgBase64 = fs.readFileSync(`img/currentparent/${item.currentParent.image.split("id=")[1]}.jpg`).toString('base64');
-          } catch (error) {
-            console.log('\x1b[33m%s\x1b[0m', "Error reading current parent image file:", item.currentParent.image);
+    
+          if (item.currentParent.image && item.currentParent.image !== "") {
+            try {
+              item.currentParent.imgBase64 = fs.readFileSync(`img/currentparent/${item.currentParent.image.split("id=")[1]}.jpg`).toString('base64');
+            } catch (error) {
+              console.log('\x1b[33m%s\x1b[0m', "Error reading current parent image file:", item.currentParent.image);
+            }
           }
-        }
-        // console.log(item);
-        const templateHtml = fs.readFileSync("./templates/student-info-001.hbs", "utf8");
-        handlebars.registerHelper("eq", (a, b) => {
-          return a === b;
-        });
-        handlebars.registerHelper("noteq", (a, b) => {
-          return a != b;
-        });
-        const template = handlebars.compile(templateHtml);
-        const html = template(item);
-        
+          // console.log(item);
+          const templateHtml = fs.readFileSync("./templates/student-info-001.hbs", "utf8");
+          handlebars.registerHelper("eq", (a, b) => {
+            return a === b;
+          });
+          handlebars.registerHelper("noteq", (a, b) => {
+            return a != b;
+          });
+          const template = handlebars.compile(templateHtml);
+          const html = template(item);
+          
 
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.setContent(html, { waitUntil: "domcontentloaded" });
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+          await page.setContent(html, { waitUntil: "domcontentloaded" });
 
-        const filename = item.student.fullname.replace(/\s+/g, "_").toLowerCase();
-        await page.pdf({
-          path: `output/${filename}.pdf`,
-          format: "A4",
-          printBackground: true,
-        });
+          const filename = item.student.fullname.replace(/\s+/g, "_").toLowerCase();
+          await page.pdf({
+            path: `output/${filename}.pdf`,
+            format: "A4",
+            printBackground: true,
+          });
 
-        await browser.close();
-        console.log('\x1b[36m%s\x1b[0m', `✅ PDF ${filename}.pdf generated successfully!`);
+          await browser.close();
+          console.log('\x1b[36m%s\x1b[0m', `✅ PDF ${filename}.pdf generated successfully!`);
+        }, 1000 * index);
       })();
     });
   });
